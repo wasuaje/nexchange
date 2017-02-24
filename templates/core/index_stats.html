@@ -1,0 +1,128 @@
+{% extends "core/base.html" %}
+{% load humanize %}
+
+ <style>
+  input {
+  
+  border: 1px solid #111;
+   background: transparent;
+   width: 100px;
+   padding: 5px 35px 5px 5px;
+   font-size: 12px;
+   border: 1px solid #ccc;
+   height: 34px;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+ 
+} 
+ </style>
+
+{% block main %}
+			<div class="page-header">
+				<h1>
+					BTC <small>{{ action }}</small>
+				</h1>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 col-md-6">
+								
+								
+							
+				 </div>
+				
+				<div class="col-xs-6 col-sm-6 col-md-6">  
+					
+			    </div>
+			</div>
+			
+			<div class="row">
+			  <div class="col-xs-5 col-sm-5 col-md-5"> 
+					<div class="panel panel-info">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">Buying</h3>
+					  </div>
+					  <div class="panel-body">
+					      <table class="table table-hover table-condensed">	 
+				  				<tr>
+				  					<th>#</th>
+				  					<th>Qtty.</th>
+				  					<th>Total</th>
+				  					<th>Profit</th>
+				  				</tr>
+					  			<tr>
+						        	<td>{{ data.bought.count |intcomma}}</td>	   
+						        	<td>{{ data.bought.amount|intcomma }}</td>
+					            	<td>{{ data.bought.total |intcomma}}</td>
+					                <td>{{ data.bought.profit|intcomma }}</td>
+					            </tr>
+					  	    </table>
+					  </div>
+					</div>
+			  </div>
+
+			  <div class="col-xs-5 col-sm-5 col-md-5"> 
+					<div class="panel panel-info">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">Selling</h3>
+					  </div>
+					  <div class="panel-body">
+					      <table class="table table-hover table-condensed">	 
+				  				<tr>
+				  					<th>#</th>
+				  					<th>Qtty.</th>
+				  					<th>Total</th>
+				  					<th>Profit</th>
+				  				</tr>
+					  			<tr>
+						        	<td>{{ data.sold.count |intcomma}}</td>	   
+						        	<td>{{ data.sold.amount|intcomma}}</td>
+					            	<td>{{ data.sold.total |intcomma}}</td>
+					                <td>{{ data.sold.profit|intcomma}}</td>
+					            </tr>
+					  	    </table>					    
+					  </div>
+					</div>			 
+			  </div>
+
+			  <div class="col-xs-2 col-sm-2 col-md-2"> 
+					<div class="panel panel-success">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">Filters</h3>
+					  </div>
+					  <div class="panel-body">
+					    
+					     <form method="post" class="form">
+							{{form}}
+				    		{% csrf_token %}
+						    <input type="submit" value="Enviar" />
+						</form>
+
+					  </div>
+					</div>			 
+			  </div>
+
+
+		    </div>
+
+		
+	 
+ <script>	
+   $(function() {
+      $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+      $('input:text, select')
+		  .css({
+		          'font' : 'inherit',
+		         'color' : 'inherit',
+		    'text-align' : 'left',
+		       'outline' : 'none',
+		        'cursor' : 'text',
+		        'width'  : '135px'
+		  });  
+   });
+
+  </script>	
+			
+			
+{% endblock %}

@@ -1,0 +1,11 @@
+<div id="{{ id }}" class="menuSection tab-pane {% if id == 'menu1' %} active in {% elif id == 'menu2' %}  panel hidden {% elif id == 'menu3' %}  panel hidden  {% else %} fade {% endif %}">
+    <div class="row {{ id }}">
+        {% block step_content %}
+        {% endblock %}
+        {% block spa_navigation %}
+            {% include 'core/partials/spa_navigation.html' with id=id %}
+        {% endblock %}
+    </div>
+</div>
+     
+

@@ -1,0 +1,26 @@
+{%  load i18n %}
+{% load tz %}
+<div class="panel panel-success">
+    <div class="panel-body">
+        <h1>{% trans 'Order placed successfully' %}</h1>
+        <div class="row">
+            <div class="col col xs-12"></div>
+            {% trans 'Please tranfer to this BTC Address' %}
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                 <p><strong> {{ address }}</strong></p>
+                <img src="//blockr.io/api/v1/address/Qr/{{ address }}" alt="{{ address }}">
+            </div>
+        </div>
+        <div class="col col-lg-12">
+         {% trans 'Notice that you must pay until' %}
+        </div>
+        {% localtime on %}
+        <div class="col col-lg-12" id="pay_until_notice">
+            <p><strong>{{pay_until |date:"H:iA (e)"}}</strong></p>
+        </div>
+        {% endlocaltime %}
+    </div><!-- /pannel-body -->
+</div><!-- /pannel -->
+<input type="hidden" name="order_id" value="{{order_id}}" class="order_id" >

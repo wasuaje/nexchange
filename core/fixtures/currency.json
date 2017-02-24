@@ -1,0 +1,43 @@
+[
+  {
+    "model": "core.currency",
+    "pk": 1,
+    "fields": {
+      "code": "BTC",
+      "name": "BTC",
+      "min_confirmations": 4,
+      "created_on":"2016-05-20T17:41:28+00:00",
+      "modified_on":"2016-05-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "core.currency",
+    "pk": 2,
+    "fields": {
+      "code": "USD",
+      "name": "USD",
+      "created_on":"2016-05-20T17:41:28+00:00",
+      "modified_on":"2016-05-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "core.currency",
+    "pk": 3,
+    "fields": {
+      "code": "RUB",
+      "name": "RUB",
+      "created_on":"2016-05-20T17:41:28+00:00",
+      "modified_on":"2016-05-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "core.currency",
+    "pk": 4,
+    "fields": {
+      "code": "EUR",
+      "name": "EUR",
+      "created_on":"2016-05-20T17:41:28+00:00",
+      "modified_on":"2016-05-20T17:41:28+00:00"
+    }
+  }
+]

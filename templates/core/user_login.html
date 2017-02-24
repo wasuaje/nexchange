@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block main %}
+<div class="page-header">
+  <h1>
+    {% trans "BTC - Exchange" %} <small>{% trans "Login" %}</small>
+  </h1>
+</div>
+
+<form method="post" class="form" enctype="multipart/form-data" >
+  {% csrf_token %}
+  
+  {% bootstrap_form form %}
+
+
+  <input type="submit" name="submit" class="btn btn-success btn-lg" id="submit" value="{% trans "Login" %}">
+  <input type="hidden" name="next" value="{{ next }}" />
+</form>
+<div class="p-list">
+    <p>{% trans "Don't have an account?" %} <a class="nav-link" href="{% url 'core.user_registration' %}">{% trans "Register here" %}</a></p>
+    <p>{% trans "Forgot your password?" %} <a class="nav-link" href="{% url 'accounts.password_reset' %}">{% trans "Reset it here" %}</a></p>
+</div>
+{% endblock %}

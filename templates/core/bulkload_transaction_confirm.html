@@ -1,0 +1,70 @@
+{% extends "core/base.html" %}
+
+{% block main %}
+			<div class="page-header">
+				<h1>
+					BTC <small>Transaction {{action}}</small>
+				</h1>
+			</div>
+
+			    {% if error %}
+				<div class="row">
+						<div class="alert alert-danger" role="alert">
+			            	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			            	 <div id="alerta-mensaje"><strong>Atention: </strong> {{ error }} </div>
+			          	</div>
+				</div>
+		        {% endif %}
+		    		
+ 				{% if success %}
+				<div class="row">
+						<div class="alert alert-success " role="alert">
+			            	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			            	 <div id="alerta-mensaje"><strong>Result: </strong> {{ success }} </div>
+			          	</div>
+				</div>
+		        {% endif %}
+		    		
+			<br>
+
+				<div class="row">
+					<form method="post" class="form" action= "/transaction/bulkload/confirm/" enctype="multipart/form-data" >
+					{% csrf_token %}
+					{% if frm_resource %}
+					<div class="col-sm-offset-4 col-xs-2 col-sm-2 col-md-2"> 
+						{{frm_resource}}
+					</div>
+					<div class="col-xs-2 col-sm-2 col-md-2"> 
+						<button type="submit" class="btn btn-info btn-lg">Confirm</button>
+					</div>
+					{% else %}
+						<div class="col-xs-3 col-sm-3 col-md-3"> <button type="button" class="btn btn-warning" onclick="window.location.href='/transaction/'">Exit</button></div>
+					{% endif %}
+					
+				</div>	
+			<br>
+				<div class="row">
+				
+						{{ table | safe}}
+				
+				</div>	
+					
+					</form>
+
+<script>	
+   $(function() {
+      $('input:text, select')
+		  .css({
+		          'font' : 'inherit',
+		         'color' : 'inherit',
+		    'text-align' : 'left',
+		       'outline' : 'none',
+		        'cursor' : 'text',
+		        'width'  : '100px'
+		  });  
+   });
+
+  </script>	
+			
+
+{% endblock %}

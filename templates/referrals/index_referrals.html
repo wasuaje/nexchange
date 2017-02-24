@@ -1,0 +1,131 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block main %}
+
+
+{% include 'core/partials/popover_withdraw_address.html' %}
+
+        	
+			<div class="page-header">
+				<h1>
+					{% trans "BTC" %}<small> {{ action }} </small>
+				</h1>
+                <div class="line-order" >
+                    ----------------------
+                </div>
+			</div>
+
+
+			<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+
+            <div  class="panel panel-default  visible-sm visible-xs">
+        		{% for ref in referrals %}
+                  <div id="{{ ref.referee.id}}" class="headers-mobile panel-heading">{{ ref.referee.profile.partial_phone }}
+                        <a class="pull-right" data-toggle="collapse" data-parent="{{ ref.referee.id}}" href="#body-{{ ref.referee.id}}">
+                            {% trans "details" %}
+                        </a>
+                  </div>
+
+                  <div id="body-{{ ref.referee.id}}" class="panel-body panel-collapse collaps collapse">
+
+                  <div>
+                      <div class = "headers-mobile header-text">{% trans "Partial phone" %}</div>
+                      {{ ref.referee.profile.partial_phone }}
+                  </div>
+
+
+                  <div>
+                      <div class = "headers-mobile header-text">{% trans "Confirmed orders count" %}</div>
+                      {{ ref.confirmed_orders_count }}
+                  </div>
+
+
+                  <div>
+                      <div class = "headers-mobile header-text">{% trans "Turnover" %}</div>
+                      {{ ref.turnover }}
+                  </div>
+
+
+                  <div>
+                      <div class = "headers-mobile header-text">{% trans "Revenua" %}</div>
+                      {{ ref.revenue }}
+                  </div>
+
+
+                  <div>
+                      <div class = "headers-mobile header-text">{% trans "Last seen" %}</div>
+                      {{ ref.referee.profle.last_visit }}
+                  </div>
+
+
+                  <div class = "headers-mobile header-text">{% trans "Id" %}</div>
+                      {{ ref.referee.profle.id }}
+                  </div>
+
+              {% endfor %}
+            </div>
+
+			<div class="table-responsive visible-md visible-lg ">
+			  <table class=" table-hover table-condensed col-lg-12">
+  				<tr class="table-order">
+  					<th>{% trans "Partial phone" %}</th>
+  					<th >{% trans "Confirmed orders count" %}</th>
+  					<th>{% trans "Turnover" %}</th>
+  					<th>{% trans "Revenua" %}</th>
+  					<th>{% trans "Last seen" %}</th>
+  					<th>{% trans "Id" %}</th>
+  				</tr>
+	    		
+	    		{% for ref in referrals %}
+			        	<td>{{ ref.referee.profile.partial_phone }}
+		            	<td>{{ ref.confirmed_orders_count }}</td>
+		                <td>{{ ref.turnover }}</td>
+		                <td>{{ ref.revenue }}</td>
+                        <td>{{ ref.referee.profile.last_visit }}</td>
+                        <td>{{ ref.referee.id }}</td>
+	        	{% empty %}
+
+		    		<tr>
+		    			<td colspan="10">
+		    				<h3>{% trans "No referrals found" %}</h3>
+		    		    </td>
+		    		</tr>
+	    		{% endfor %}
+			   
+			  </table>
+			</div><!-- end responsive -->
+			</div>
+		    </div>
+
+
+
+		<div class="pagination">
+		    <span class="step-links">
+		        {% if orders.has_previous %}
+		            <a href="?page={{ referrals_list.previous_page_number }}">{% trans "previous" %}</a>
+		        {% endif %}
+
+		        <span class="current">
+		            {% trans "Page"%} {{ referrals_list.number }} {% trans "of"%}  {{ referrals_list.paginator.num_pages }}.
+		        </span>
+
+		        {% if referrals_list.has_next %}
+		            <a href="?page={{ referrals_list.next_page_number }}">{% trans "next" %}</a>
+		        {% endif %}
+		    </span>
+		</div>
+{% endblock %}
+{% block extra_js_footer %}
+    <script src="{% static 'js/index_orders.js' %}"></script>
+	<link href="{% static 'bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css' %}" rel="stylesheet">
+	<script src="{% static 'bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js' %}"></script>
+	<script type="text/javascript">
+		$(function () {
+            $('[data-toggle="popover"]').popover({content: $("#popover-template").html()});
+            $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+		});
+	</script>
+{% endblock %}

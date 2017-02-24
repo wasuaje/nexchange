@@ -1,0 +1,15 @@
+[
+  {
+    "model": "core.address",
+    "pk": 1,
+    "fields": {
+      "created_on": "2016-06-26T21:36:01.848Z",
+      "modified_on": "2016-06-26T21:36:01.848Z",
+      "deleted": false,
+      "disabled": false,
+      "type": "W",
+      "address": "38veBMhDeudaZs7zmDUy68cYJZupaHVBvR",
+      "user": ["onit"]
+    }
+  }
+]

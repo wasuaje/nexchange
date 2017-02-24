@@ -1,0 +1,63 @@
+<div class="row">
+        <div class="col-xs-5 col-sm-5 col-md-5 center-block controls">
+            <div class="col-lg-12">
+                <h2 class="rate-buy">
+
+                </h2>
+                <h2 class="currency"></h2>
+            </div>
+            <div class="col-lg-12">
+              <span class="btn btn-success btn-lg trigger trigger-buy">
+                    {% trans "Buy" %}
+              </span>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-2"></div>
+        <div class="col-xs-5 col-sm-5 col-md-5 controls">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="rate-sell">
+
+                    </h2>
+                    <h2 class="currency"></h2>
+                </div>
+                <div class="col-lg-12">
+                  <span class="btn btn-danger btn-lg trigger trigger-sell">
+                        {% trans "Sell" %}
+                  </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-5 col-sm-5 col-md-5 amounts">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control amount amount-cash rate-buy" name="amount-cash">
+                        <div class="input-group-btn">
+                            {{select_from | safe}}
+                        </div><!-- /btn-group -->
+                    </div><!-- /input-group -->
+                </div><!-- /pannel-body -->
+            </div><!-- /pannel -->
+        </div><!-- /col -->
+
+        <div class="col-xs-2 col-sm-2 col-md-2">
+            <h2>{% trans "To" %}</h2>
+        </div><!-- /col -->
+
+        <div class="col-sm-5 col-xs-5 col-md-5 amounts">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control amount amount-coin" placeholder="1" name="amount-coin">
+                        <div class="input-group-btn">
+                            {{select_to | safe}}
+                        </div><!-- /btn-group -->
+                    </div><!-- /input-group -->
+                </div><!-- /pannel-body -->
+            </div><!-- /pannel -->
+        </div><!-- /col -->
+    </div>

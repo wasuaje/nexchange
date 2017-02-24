@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load static %}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 step_panel_cont">
+    <div class="step_panel">
+        <div class="step_panel_box process-step step1">
+            <a href="#menu1" data-toggle="tab">
+                <button type="button"
+                        class="btn btn-default btn-circle disableClick"
+                        data-toggle="tab">
+                    <span class="step-icon-container">
+                        <i class="fa fa-bar-chart step-icon"></i>
+                    </span>
+                </button>
+                <p>{% trans "Order" %}</p>
+            </a>
+         </div>
+
+        <div class="step_panel_box process-step step2">
+            <a href="#menu2" data-toggle="tab">
+                <button type="button"
+                        class="btn btn-default btn-circle btn-register disableClick">
+                <span class="step-icon-container">
+                    <i class="fa fa-mobile step-icon"></i>
+                </span>
+                </button>
+                <p>{% trans "Login" %}</p>
+            </a>
+        </div>
+
+          <div class="step_panel_box process-step step3">
+            <a href="#menu3" data-toggle="tab">
+                <button type="button"
+                        class="btn btn-default btn-circle btn-register disableClick">
+                    <span class="step-icon-container">
+                        <i class="fa fa-bitcoin step-icon"></i>
+                    </span>
+                </button>
+                <p>{% trans 'Confirm' %}</p>
+            </a>
+         </div>
+    </div>
+</div>

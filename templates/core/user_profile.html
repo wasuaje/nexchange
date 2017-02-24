@@ -1,0 +1,74 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block main %}
+    <div class="page-header">
+        <h1>
+            {% trans "BTC - Exchange" %} <small>{% trans "User Profile" %}</small>
+        </h1>
+    </div>
+
+
+    {% if request.user.profile.disabled %}
+        <div class="well">
+            
+            <div class="alert alert-danger" role="alert" style="display:block" id="alert_phone_not_verified">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Your phone number is not verified yet." %}
+            </div> 
+
+            <div class="alert alert-warning" role="alert" style="display:none" id="alert_verifying_phone">
+                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;{% trans "Verifying phone now..." %}
+            </div>
+
+            
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-group"> 
+                        <input type="text" aria-label={% trans "Insert SMS verification token here" %} placeholder={% trans "Insert SMS verification token here" %} class="form-control" id="verification_code"> 
+                        <div class="input-group-btn"> 
+                            <button data-url="{% url 'core.verify_phone' %}" class="btn btn-default" type="button" id="verify_phone_now">{% trans "Verify phone now" %}</button> 
+                        </div> 
+                    </div> 
+                </div>
+
+                <div class="col-md-4">
+                    <a href="#" class="btn btn-success btn-sm pull-right" id="resend_sms_button" data-url="{% url 'core.resend_sms' %}">
+                        <i class="fa fa-repeat" aria-hidden="true"></i>&nbsp;{% trans "Send-me the token again" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <label class="control-label" for="phone">{% trans "Phone"%}</label>
+        <div class="input-group"> 
+            <input type="text" aria-describedby="basic-addon2" value="{{request.user.profile.phone}}" disabled="disabled" class="form-control disabled">
+            <span id="basic-addon2" class="input-group-addon">
+                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                {% trans "Your phone has been verified." %}
+            </span>
+        </div>
+        <br>
+    {% endif%}
+
+
+
+
+    <form method="post" class="form" enctype="multipart/form-data" >
+        {% csrf_token %}
+
+
+        {% bootstrap_form profile_form %}
+        {% bootstrap_form user_form %}
+        {% bootstrap_form referral_form %}
+
+        <input type="submit" name="submit" class="btn btn-success btn-lg" id="submit" value="Update Profile">
+    </form>
+{% endblock %}
+
+{% block extra_js_footer %}     
+    <script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}
+

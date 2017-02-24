@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block main %}
+	<div class="page-header">
+		<h1>
+			{% trans "BTC - Exchange" %} <small> </small>
+		</h1>
+	</div>
+
+		
+    <div class="row" id="alerta" style="display:none;">
+      <div class="col-md-12 column">          
+          <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+             <div id="alerta-mensaje"> </strong> {{ error }} </div>
+          </div>
+      </div>
+    </div>    
+
+
+    <div class="row" id="exito" style="display:none;">
+      <div class="col-md-12 column">          
+          <div class="alert alert-success" id="exito-mensaje">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <div id="exito-mensaje"> {{ success }} </div>
+          </div>
+      </div>
+    </div>    
+
+	<div class="row" id="main" >
+      <div class="col-md-4 column">          
+          
+      </div>
+      <div class="col-md-4 column">          
+          <img src="/static/images/money.png" height="300" weight="200">
+      </div>
+      <div class="col-md-4 column">          
+         
+      </div>
+  </div>
+{% endblock %}
+

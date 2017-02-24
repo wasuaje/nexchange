@@ -1,0 +1,18 @@
+{% load i18n %}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 price_box_next_cont">
+    {%  if id != 'menu1' %}
+    <span class="price_box_next next-step">
+        {% trans 'Next' %}
+        <i class="fa fa-chevron-right"></i>
+    </span>
+    {% else %}
+        <span class="price_box_next next-step sell-go hidden">
+            {% trans 'Sell' %}
+            <i class="fa fa-chevron-right"></i>
+        </span>
+        <span class="price_box_next next-step buy-go">
+            {% trans 'Buy' %}
+            <i class="fa fa-chevron-right"></i>
+        </span>
+    {% endif %}
+</div>

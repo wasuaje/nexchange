@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block main %}
+<div class="page-header">
+  <h1>
+    {% trans "BTC - Exchange" %} <small>{% trans "User Registration" %}</small>
+  </h1>
+</div>
+
+<form method="post" class="form" enctype="multipart/form-data" >
+  {% csrf_token %}
+  
+  {% bootstrap_form profile_form %}
+  {% bootstrap_form user_form %}
+
+  <input type="submit" name="submit" class="btn btn-success btn-lg" id="submit" value="{% trans 'Register'%}">
+</form>
+{% endblock %}

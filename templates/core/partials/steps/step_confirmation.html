@@ -1,0 +1,52 @@
+{% extends 'core/partials/steps/step_base.html' %}
+{% load i18n %}
+{% block step_content %}
+    <div class="row step-confirm panel">
+        <h3>{% trans "Your Order" %}</h3>
+        <div class="col-sm-12 center confirm-order">
+            <div class="col-sm-5 col-md-5">
+                <div class="col-lg-12 confirmation-elem">
+                    <span class="amount btc-amount-confirm"></span> {%  trans "BTC" %}
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 confirmation-elem for">
+                <span>{% trans "for" %}</span>
+            </div>
+            <div class="col-sm-5 col-md-5 confirmation-elem">
+                <div class="col-lg-12">
+                    <span class="amount cash-amount-confirm"></span> <span class="currency"></span>
+                </div>
+            </div>
+            <div class="col-lg-12 confirmation-elem payment-confirm">
+                <span>{% trans "Payment Method" %}</span>
+            <div class="payline">  </div>
+            </div>
+
+
+            <div class="col-lg-12 confirmation-elem">
+                <span class="payment-preference-confirm"></span>
+            </div>
+            <div class="col-lg-12 confirmation-elem">
+                <span class="payment-preference-identifier-confirm"></span>
+            </div>
+        <div style="display:none">
+          <input type="hidden" name="csrfmiddlewaretoken" id="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        </div>
+        <!-- Modal -->
+        <div class="col-lg-12"> 
+            <input type="hidden" name="type" value="1" class="trade-type">
+            <input type="hidden" name="payment-option" value="" class="payment-option">
+            <input type="hidden" name="payment-preference" value="" class="payment-preference-actual">            <input type="hidden" name="payment-preference-identifier" value="" class="payment-preference-identifier">
+            <input type="hidden" name="payment-preference-owner" value="" class="payment-preference-owner">
+            <button  class="sell-go btn btn-danger btn-lg place-order hidden">{% trans "Sell" %}</button>
+            <button  class="buy-go btn btn-success btn-lg place-order ">{% trans "Buy" %}</button>
+            <a href="/" class="btn place-cancel">{% trans "Cancel" %}</a>
+        </div>
+    </div>
+</div>
+{# used for success modal placement #}
+<div class="successOrder"></div>
+
+{% endblock %}
+{% block spa_navigation %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{
+  "name": "nexchange",
+  "homepage": "https://github.com/onitsoft/nexchange",
+  "authors": [
+    "Oleg Tikhonov <hellgy@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.0",
+    "bootstrap": "^3.3.6",
+    "moment-timezone": "^0.5.4",
+    "js-cookie": "^2.1.2",
+    "x-editable": "^1.5.1",
+    "card": "https://github.com/onitsoft/card.git",
+    "intl-tel-input": "https://github.com/onitsoft/intl-tel-input.git"
+  },
+  "devDependencies": {
+    "jasmine-core": "jasmine#^2.4.1",
+    "jasmine-jquery": "^2.1.1",
+    "bootstrap-toggle": "^2.2.2"
+  }
+}

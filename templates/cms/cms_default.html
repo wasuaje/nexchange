@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block cms_static %}
+    <div class="collapse navbar-collapse menupanel">
+        <ul class="nav navbar-nav">
+            {% for c in cmsmenu %}
+                <li class="active">
+                    <a href="/cms/{{ c.0 }}">
+                        {{ c.1 }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="cms_text">
+        <div class="cms_header">
+            {{ head | safe }}
+        </div>
+        <div class="line-order" >
+            -----------------------------------------
+        </div>
+       <div class="cms_written">
+            {{ written_by| safe }}
+        </div>
+
+        <div class="cms_body">
+            {{ body | safe }}
+        </div>
+    </div>
+{% endblock %}

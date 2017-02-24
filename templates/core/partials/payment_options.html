@@ -1,0 +1,39 @@
+{% load i18n %}
+{% load static %}
+{% if type == 'buy' %}
+
+<div class="row {{ type }} row_type">
+    <div class="payment_title">
+        {% trans 'Credit cards' %}
+    </div>
+    {% include 'core/partials/modals/card.html' with card_type='PayPal' label='Visa' icon='icons/small/visa.png' card=cards.paypal %}
+    {% include 'core/partials/modals/card.html' with card_type='PayPal' label='Mastercard' icon='icons/small/mastercard.png' card=cards.paypal %}
+
+</div>
+{% endif %}
+
+<div class="row {{ type }} row_type">
+
+    <div class="payment_title">
+        {% trans 'Wallets' %}
+    </div>
+    {% include 'core/partials/modals/card.html' with card_type='Qiwi Wallet' icon='icons/small/qiwi.png' card=cards.qiwi %}
+    {% if type == 'buy' %}
+            {% include 'core/partials/modals/card.html' with card_type='Robokassa' icon='icons/small/robokass.png' card=cards.robokass %}
+    {% endif %}
+    {% include 'core/partials/modals/card.html' with card_type='PayPal' label='PayPal' icon='icons/small/paypal.png' card=cards.paypal %}
+
+</div>
+<div class="row {{ type }} row_type">
+    <div class="payment_title">
+        {% trans 'Bank'%}
+    </div>
+    {% if type == 'buy' %}
+        {% include 'core/partials/modals/card.html' with card_type='Alfa-Bank' label='Alfa-Bank' icon='icons/small/alfabank.png' card=cards.alfa %}
+        {% include 'core/partials/modals/card.html' with card_type='Sberbank' label='Sberbank' icon='icons/small/sber.png' card=cards.sber %}
+        {% include 'core/partials/modals/card.html' with card_type='Sepa' label='Sepa' icon='icons/small/sepa.png' card=cards.alfa %}
+    {% else %}
+        {% include 'core/partials/modals/card.html' with card_type='Card 2 Card' label='Card 2 Card' icon='icons/small/c2c.ico' %}
+    {% endif %}
+    {% include 'core/partials/modals/card.html' with card_type='Cash' label='Cash' icon='icons/small/cash.png' card=cards.alfa %}
+</div>

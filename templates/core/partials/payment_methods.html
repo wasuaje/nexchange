@@ -1,0 +1,13 @@
+{%  load i18n %}
+{% load tz %}
+
+<div class="input-group">
+  <div class="input-group-btn">     
+  	<select name="payment-method" class="payment-method">   
+		{% for pay in payment_methods %}
+			<option value ="{{pay.id}}">{{pay.name}}</option>
+		{% endfor%}
+	</select>
+
+  </div><!-- /btn-group -->
+</div><!-- /input-group -->

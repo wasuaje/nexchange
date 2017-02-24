@@ -1,0 +1,17 @@
+# About this file, check http://devcenter.wercker.com/cli/configuration/environment-variables.html
+
+# Don't forget to set postgres parameters in wercker.yml (services section)
+# or in web interface, for the builds...
+X_GUNICORN_PORT=8000
+X_DOCKER_HUB_USER=onit
+X_DOCKER_HUB_REPO=onitsoft/nexchange
+# Where to copy the app deploy
+X_APP_ROOT=/usr/src/app
+X_POSTGIS_ENV_POSTGRES_USER=nexchange
+X_POSTGIS_ENV_POSTGRES_PASSWORD=nexchange
+X_POSTGIS_ENV_POSTGRES_DB=nexchange
+X_NEW_RELIC_CONFIG_FILE=newrelic.ini
+X_NEW_RELIC_ENVIRONMENT=development
+X_NEW_RELIC_LICENSE_KEY=cf40949f459cfbd61b87e9d10673cc0bfe06f3aa
+X_DJANGO_SETTINGS_MODULE=nexchange.settings_dev
+X_DOCKER_IMAGE_TAG=dev

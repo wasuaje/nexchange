@@ -1,0 +1,16 @@
+[
+  {
+    "model": "referrals.program",
+    "pk": 1,
+    "fields": {
+        "name": "Default",
+        "percent_first_degree": 2,
+        "currency": [1, 2, 3, 4],
+        "max_payout_btc": 1,
+        "max_lifespan": 31536000,
+        "is_default": 1,
+        "created_on":"2016-05-20T17:41:28+00:00",
+        "modified_on":"2016-05-20T17:41:28+00:00"
+    }
+  }
+]

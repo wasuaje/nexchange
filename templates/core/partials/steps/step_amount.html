@@ -1,0 +1,58 @@
+{% extends 'core/partials/steps/step_base.html' %}
+{% load i18n %}
+{% block step_content %}
+    <div class="chart_panel_selectbox_panel">
+        <div class="input-group-btn">
+            {{select_pair| safe}}
+        </div>
+        <div class="input-group-btn">
+            <select name="graph-range" id="graph-range" class="chart_panel_selectbox classic">
+                {% for range in graph_ranges %}
+                    <option value="{{  range.val }}"> {{ range.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div id="container-graph">
+    </div>
+
+
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-5 price_box price_box_ticker">
+                <span class="rate rate-buy"></span><br>
+                <span class="currency"></span><br>
+                <a href="#" class="trigger trigger-buy active-action">{% trans "Buy" %}</a>
+            </div>
+            <div class="col-xs-2"></div>
+            <div class="col-xs-5 price_box price_box_ticker">
+                <span class="rate rate-sell"></span><br>
+                <span class="currency"></span><br>
+                <a href="#" class="price_box2_a trigger trigger trigger-sell">{% trans "Sell" %}</a></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-5 price_box" id="pricebox_rub">
+                <div class="price_box_selectbox_cont">
+                   <input type="text" class="price_box_selectbox_cont_textbox amount amount-cash" placeholder="">
+                   {{select_from | safe}}
+                </div>
+            </div>
+            <div class="col-xs-2 price_box_mid">
+                <i class="fa fa-refresh fa-5x exchange-sign" aria-hidden="true"></i>
+            </div>
+            <div class="col-xs-5 price_box" id="pricebox_btc">
+
+                <div class="price_box_selectbox_cont">
+                    <input type="text" class="price_box_selectbox_cont_textbox amount amount-coin" placeholder="0.1">
+                    {{select_to | safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'core/partials/modals/payment_type.html' with id="UserAccountModal" type="sell" %}
+    <div class="paymentSelectionContainer">
+    </div>
+    {% include 'core/partials/modals/sell.html' with id="CardSellModal" method="card" form="card" legend="Add a new payout card" %}
+    {% include 'core/partials/modals/sell.html' with id="QiwiSellModal" type="wallet" form="phone" legend="Add a new payout wallet" %}
+{% endblock %}

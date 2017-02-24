@@ -1,0 +1,164 @@
+{% extends 'core/partials/modals/success_order.html' %}
+{%  load i18n %}
+{% load tz %}
+
+{% block modal_content %}
+<style>
+    .box_wrapper {
+        background: white none repeat scroll 0 0;
+        border: 4px solid #eaeaea;
+        box-sizing: border-box;
+        margin: 33px auto;
+        max-width: 1250px;
+        height:500px;
+        overflow: hidden;
+        width: 90%;
+    }
+    .center_block{
+        display: table;
+        margin: 0 auto;
+    }
+</style>
+<div class="panel panel-success">
+    <div class="panel-body">
+        <h1>{% trans 'Order placed successfully' %}</h1>
+        <div class="row hidden">
+            <div class="col col-lg-12">
+                <p><strong>{{order.payment_preference.identifier}}</strong></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                <h4>
+                    {% trans 'Buying' %} {{order_amount}} {% trans 'BTC' %} for {{ amount_cash }} {% trans order.currency.code %}
+                </h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="dropin-container-wait">
+                <div class="center_block">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom"></i>
+                </div>
+                <div class="center_block">
+                    Connecting to payment gateway...
+                </div>
+            </div>
+            <form id="addpaymentmethod" method="post" action="{% url 'core.order' %}?oid={{ order.pk }}">
+                {% csrf_token %}
+                <input id="order_id" type="hidden" name="order_id" value="{{order.id}}" class="order_id" >
+                <input id="order_amount" type="hidden" name="order_amount" value="{{amount_cash}}" class="order_amount" >
+                <input id="order_unique_ref" type="hidden" name="order_unique_ref" value="{{unique_ref}}" class="order_unique_ref" >
+                <input id="payment_method_nonce" type="hidden" name="payment_method_nonce" value="" class="payment_method_nonce" >
+                <input id="paypalemail" type="hidden" name="paypalemail" value="" class="paypalemail" >
+                <input id="paytype" type="hidden" name="paytype" value="" class="paytype" >
+
+                <div class="container-fluid">
+                    <div class="table-responsive" id="dropin-container"></div>
+                    <br/>
+                    <br/>
+                    <input type="submit" class="hidden" id="submitbraintreeform">
+                </div>
+            </form>
+            <div class="col-lg-12 withdraw_notice">
+                <span>
+                    * {% trans 'After paying you can withdraw your bitcoins immidiately and without any fee' %}
+                </span>
+            </div>
+        </div>
+
+    </div><!-- /pannel-body -->
+</div><!-- /pannel -->
+
+<script>
+    $(document).ready(function() {
+        console.log('{{ clienttoken }}');
+        var clienttoken = '{{ clienttoken  }} ';
+        braintree.setup(clienttoken,
+                        "dropin",
+                        { container: "dropin-container",
+                          onReady: function (integration) {checkoutBraintree = integration;
+                                $('#dropin-container-wait').addClass('hide');
+                                $('#send-payment-button').removeClass('hidden')
+                          },
+                          onError: function (obj) {
+                            console.log('Error', obj);
+                            if (obj.type == 'VALIDATION') {
+                                // Validation errors contain an array of error field objects:
+                                console.log('VALIDATION', obj);
+                                obj.details.invalidFields;
+                            } else if (obj.type == 'SERVER') {
+                                // If the customer's browser cannot connect to Braintree:
+                                console.log('SERVER', obj);
+                                obj.message; // "Connection error"
+                                // If the credit card failed verification:
+                                obj.message; // "Credit card is invalid"
+                                obj.details; // Object with error-specific information
+                            }
+                          },
+                          onPaymentMethodReceived: function(obj) {
+                              var nonce = obj['nonce'];
+                              var formValid = true;
+                              if (! nonce) {
+                                  formValid = false;
+                              }
+
+                              if (formValid) {
+                                  $('#payment_method_nonce').val(nonce);
+                                  if (obj['type'] == 'PayPalAccount'){
+                                      $('#paypalemail').val(obj['details']['email']);
+                                      $('#paytype').val('PayPalAccount');
+                                  }
+                                  else{
+                                      $('#paytype').val('CreditCard');
+                                  }
+                                  console.log('SEND FORM', obj, nonce);
+
+                                  url = '{% url 'core.braintree_order' %}?oid={{ order.pk }}';
+
+                                  var formData = {
+                                      'payment_method_nonce': $('#payment_method_nonce').val(),
+                                      'order_id': $('#order_id').val(),
+                                      'order_amount': $('#order_amount').val(),
+                                      'order_unique_ref': $('#order_unique_ref').val(),
+                                      'method': 'SendFastPayment'
+                                  };
+                                  $.ajaxSetup({ beforeSend: function(xhr, settings) {
+                                      xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); }
+                                  });
+                                  $.ajax({url:url,
+                                      async: false,
+                                      type:'POST',
+                                      data:JSON.stringify(formData),
+                                      contentType: "application/json; charset=utf-8",
+                                      success: function(res) {
+                                          if (res['error'] == 1){
+                                              console.log("RES:", res['error_text']);
+                                              var error_text = res['error_text'];
+                                              toastr.error(error_text);
+                                          }
+                                          else{
+                                              alert('Payment success.');
+                                              window.location.replace("{% url 'core.order' %}?id={{ order.unique_reference }}");
+                                          }
+                                      },
+                                      error:  function(res) {
+                                          console.log("RES:", res);
+                                          alert('Error send payment.');
+                                      }
+                                  });
+                              }
+                              else{
+                                  console.log('Form error');
+                              }
+                              return false;
+                          }
+                        });
+    });
+
+    $(document).on("click", "#send-payment-button" ,function (e) {
+        $('#submitbraintreeform').click();
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!-- Modal for Order success Action-->
+{%  load i18n %}
+<div class="modal fade" id="orderSuccessModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if order.payment_preference.payment_method.name != 'Robokassa' %}
+            <button type="button" class="close" data-dismiss="modal">×</button>
+          {% endif %}
+        </div>
+        <div class="modal-body successOrder">
+            <div class="success-container">
+                <div class="row">
+                    <div class="success-line col-xs-12">
+                        <span class="line">
+                            <h2>
+                                <span>{% trans 'Success' %}</span>
+                            </h2>
+                        </span>​
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="success-icon-container">
+                            <span class="helper"></span>
+                            <span class="fa fa-3x fa-check"></span>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            {% block modal_content %}
+            {% endblock %}
+        </div>
+        <div class="modal-footer">
+            {% if order.payment_preference.payment_method.name == 'Robokassa' %}
+                <a href="{{ url }}"
+                   class="btn btn-default"
+                   data-controls-modal="your_div_id"
+                   data-backdrop="static"
+                   data-keyboard="false">
+                    {% trans 'Go to Robokassa' %}
+                </a>
+            {% elif order.payment_preference.payment_method.name == 'PayPal' %}
+                <button id="send-payment-button" class="btn btn-default hidden"> {% trans 'Send payment' %} </button>
+            {% else %}
+                <a href="{% url 'core.order' %}?oid={{ order.pk }}" class="btn btn-default">{% trans 'Get your bitcoins' %}</a>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+</div>

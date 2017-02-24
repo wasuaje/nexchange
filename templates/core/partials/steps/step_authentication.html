@@ -1,0 +1,46 @@
+{% extends 'core/partials/steps/step_base.html' %}
+{% load i18n %}
+
+{% block step_content %}
+    
+    <div class="register">
+        <h4>{% trans "Phone verification"%}</h4>
+        <div class="auth-steps">
+            <div class="step1">
+                {% trans "Enter your phone" as enter_your_phone %}<br>
+                {% include 'core/partials/forms/phone.html' with label=enter_your_phone %}
+                <div class="col col-lg-12 register">
+                    <hr>
+                    <label>
+                        {% trans "Human check" %}
+                    </label>
+                    <div id="grecaptcha"></div>
+                </div>
+            </div>
+            <div class="step2 hidden">
+                <div class="row">
+                    <div class="col col-lg-12 register">
+                        <label for="verification_code">
+                            {% trans "Code from SMS" %}
+                        </label>
+                        <input type="text" name="verification_code" id="verification_code">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-12 center controls">
+            <span class="btn btn-primary create-acc disabled">
+                {% trans "Send SMS"%}
+            </span>
+            <span class="btn btn-danger create-acc resend hidden">
+                {% trans "Send again"%}
+            </span>
+            <span class="btn btn-primary verify-acc hidden">
+                {% trans "Go"%}
+            </span>
+        </div>
+    </div>
+
+{% endblock %}
+{% block spa_navigation %}
+{% endblock %}

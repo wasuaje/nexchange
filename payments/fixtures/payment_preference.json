@@ -1,0 +1,124 @@
+[
+  {
+    "model": "payments.paymentpreference",
+    "pk": 1,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": ["+7"],
+      "identifier": "+79856441427",
+      "currency": [
+        ["RUB"],
+        ["USD"],
+        ["EUR"]
+      ],
+      "comment": "one comment",
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 2,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": ["426101"],
+      "identifier": "4261012555464222",
+      "currency": [
+        ["USD"],
+        ["EUR"]
+
+      ],
+      "comment": "one comments",
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 3,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": ["555957"],
+      "identifier": "5521752054382960",
+      "currency": [
+        ["RUB"]
+      ],
+      "comment": "one comments",
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 4,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": ["427427"],
+      "identifier": "4274278009643456",
+      "currency": [
+        ["RUB"]
+      ],
+      "comment": "one comments",
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 5,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": ["427427"],
+      "identifier": "4274278007570958",
+      "currency": [
+        ["USD"]
+      ],
+      "comment": "one comments",
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 6,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": ["533205"],
+      "identifier": "5332058092720842",
+      "currency": [
+        ["EUR"]
+      ],
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 7,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": 11,
+      "currency": [
+        ["RUB"]
+      ],
+      "created_on":"2016-07-20T17:41:28+00:00",
+      "modified_on":"2016-07-20T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "payments.paymentpreference",
+    "pk": 8,
+    "fields": {
+      "user": ["onit"],
+      "payment_method": 12,
+      "currency": [
+        ["RUB"],
+        ["USD"],
+        ["EUR"]
+      ],
+      "comment": "one comments",
+      "created_on":"2016-11-01T17:41:28+00:00",
+      "modified_on":"2016-11-01T17:41:28+00:00"
+    }
+  }
+]

@@ -1,0 +1,26 @@
+{% load i18n %}
+<!-- Modal -->
+<div class="modal fade" id="{{ id|default:"PayMethModal"}}" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+            {% if type == 'buy' %}
+                <h4 class="modal_head">{% trans 'How would you like to pay?' %}</h4>
+            {% else %}
+                <h4 class="modal_head">{% trans 'How would you like to get paid?' %}</h4>
+            {% endif %}
+        </div>
+        <div class="modal-body">
+            {% include 'core/partials/payment_options.html' with type=type cards=cards %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+              {% trans "Close" %}
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

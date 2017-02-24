@@ -1,0 +1,17 @@
+{%  load i18n %}
+<div class="card-wrapper"></div>
+<form action="" name="card-form" id="card-form">
+    {% trans legend %}
+    <div class="row">
+        <div class="col col-lg-10 col-lg-offset-1 panel">
+            <div class="col col-sm-5 col-sm-offset-1 pay-row">
+                <input class="val" placeholder="{% trans "Card number" %}"
+                       type="text" name="number">
+            </div>
+            <div class="col col-sm-5 pay-row">
+                <input placeholder="{% trans "Full name" %}" type="text"
+                       value="Ivan Ivanov" name="name" class="name">
+            </div>
+        </div>
+    </div>
+</form>

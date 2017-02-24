@@ -1,0 +1,13 @@
+{%  load i18n %}
+{% load tz %}
+
+<div class="input-group">
+  <div class="input-group-btn">     
+  	<select name="user-address" class="user-address">   
+		{% for add in addresses %}
+			<option value ="{{add.id}}">{{add.address}}</option>
+		{% endfor%}
+	</select>
+
+  </div><!-- /btn-group -->
+</div><!-- /input-group -->

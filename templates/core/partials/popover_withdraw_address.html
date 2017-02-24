@@ -1,0 +1,49 @@
+<div id="popover-template" style="display:none">
+
+    <div class="row">
+        <div class="col-md-12 set_withdraw_address" style="display:none">
+            <form method="post">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
+                <div class="form-group">
+                    <select class="form-control">
+                        <option value="">Select a registered one</option>
+                        {% for addr in withdraw_addresses %}
+                        <option value="{{addr.pk}}">{{addr.address}}</option>
+                        {% endfor %}
+                    </select>
+                    <br/>
+
+                    <button type="submit" data-loading-text='<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> OK' class="btn btn-primary" autocomplete="off">
+                        OK
+                    </button>
+
+                    <a href="#" class="closepopover">Cancel</a>
+                    <button type="button" class="btn btn-default btn-sm pull-right toggle_withdraw_address_form">Add new</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-12 create_withdraw_address" style="display:none">
+            <form method="post">
+
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
+                <div class="form-group">
+
+                    <label for="withdraw_address" class="sr-only">New Address</label>
+                    <input type="text" maxlength="35" class="form-control" placeholder="Enter new address" />    
+                    <br/>
+
+                    <button type="submit" data-loading-text='<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> OK' class="btn btn-primary" autocomplete="off">
+                        OK
+                    </button>
+                    <a href="#" class="cancel_btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-danger text-center withdraw_address_err"></div>
+        </div>
+
+    </div>
+</div>    

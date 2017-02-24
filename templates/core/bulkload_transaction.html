@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+
+{% block main %}
+			<div class="page-header">
+				<h1>
+					BTC <small>Transaction {{action}}</small>
+				</h1>
+			</div>
+
+			    {% if error %}
+				<div class="row">
+						<div class="alert alert-danger" role="alert">
+			            	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			            	 <div id="alerta-mensaje">{{ error }} </div>
+			          	</div>
+				</div>
+		        {% endif %}
+		    		
+ 				{% if success %}
+				<div class="row">
+						<div class="alert alert-success " role="alert">
+			            	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			            	 <div id="alerta-mensaje"> {{ success }} </div>
+			          	</div>
+				</div>
+		        {% endif %}
+
+		    		<div class="row">
+						<form method="post" class="form" enctype="multipart/form-data" >
+						    {% csrf_token %}
+						    {% for field in form %}
+						        <div class="form-group">
+						         <div class="col-sm-10">{{ field.label_tag }}</div>
+		        				 <div class="col-sm-10"> {{ field }} </div>				        
+		        				 {% if field.errors %}
+						         <div class="col-sm-3">
+		        				 <div class="alert alert-danger" role="alert">{{ field.errors }}</div>
+		        				 </div>
+		        				{% endif %}				         
+						        </div>
+				    {% endfor %}
+		    		</div>
+		    		
+		    		<br>
+				    <div class="row">
+					    <div class="form-group">	
+							<div class="col-xs-3 col-sm-3 col-md-3"> <button type="submit" class="btn btn-success">Process</button>
+							 <button type="button" class="btn btn-warning" onclick="window.location.href='/transaction/'">Exit</button></div>
+						</div>    
+				    </div>
+				</form>
+			<br>
+
+				<div class="row">
+					
+				</div>	
+			<br>
+				<div class="row">
+				
+						{{ table | safe}}
+				
+				</div>	
+
+					</form>
+
+{% endblock %}

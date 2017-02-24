@@ -1,0 +1,25 @@
+{% load static %}
+{% load i18n %}
+{% if card.enabled or type == 'sell' %}
+    <div class="col col-xs-6 col-md-3 payment-type-trigger"
+         data-type="{{ card_type }}"
+         data-label="{{ label }}"
+         data-identifier="{{ card.identifier }}">
+        <div class="col col-xs-12 payment-trigger-image">
+                <span class="helper"></span>
+                <img src="{% static icon %}"
+                     alt="{% trans label %}"
+                     class="payment-method-icon">
+        </div>
+        <div class="col col-xs-12 ">
+            <div class="payment-label">
+                <div class="payment-label-inner">
+                    {% trans label|default:card_type %}
+                    <span class="round-button">
+                        <a href="#"> ></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

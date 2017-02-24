@@ -1,0 +1,373 @@
+html {
+  position:relative;
+  min-height: 100%;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+  height: 100%;
+}
+
+.container.main {
+}
+
+.footer {
+    min-height: 249px;
+}
+.footer_inner{
+    padding: 0;
+}
+
+.btc-amount-confirm, .cash-amount-confirm {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+body .ui-widget-header {
+    border: 0;
+    background: none;
+    background-color: #8dc73f;
+}
+
+html body .ui-state-default.ui-state-highlight {
+}
+
+html body .ui-state-default{
+}
+
+.post-content-menu {
+    background: none repeat scroll 0 0 #FFFFFF;
+    opacity: 0.8;
+    margin: -70px 10px ;
+    font-size:20px;
+    font-weight:bold;
+    position: relative;
+}
+
+.texto-categorias-small {
+    background: none repeat scroll 0 0 #FFFFFF;
+    opacity: 0.8;
+    margin: -44px 10px 10px;
+    position: relative;
+
+}
+
+#menu-items {
+    padding-bottom: 100px;
+}
+
+.withdraw_address:hover{
+    /* list orders page */
+    cursor:pointer;
+}
+
+.frozen:hover {
+  cursor:not-allowed !important;
+}
+
+
+/*target Internet Explorer 9 and Internet Explorer 10:*/
+@media screen and (min-width:0\0) {
+    select {
+        background:none;
+        padding: 5px;
+    }
+}
+
+
+.up {
+    color: #449d44;
+    opacity: 0.7;
+    -webkit-transition: opacity 3s ease-in-out;
+    -moz-transition: opacity 3s ease-in-out;
+    transition: opacity 3s ease-in-out;
+}
+
+.down {
+    -webkit-transition: opacity 3s ease-in-out;
+    -moz-transition: opacity 3s ease-in-out;
+    transition: opacity 3s ease-in-out;
+    opacity: 0.7;
+    color: #c9302c;
+}
+
+
+.process-step .btn:focus{
+  outline:none
+}
+.process{
+  display:table;
+  width:100%;
+  position:relative
+}
+.process-row{
+  display:table-row
+}
+
+.process-step{
+  display:table-cell;
+  text-align:center;
+  position:relative
+}
+.process-step p{
+  margin-top:4px
+}
+.process-step .btn-circle{
+  width:73px;
+  height:72px;
+  text-align:center;
+  font-size: 32px;
+  border-radius:50%;
+  padding: 0;
+  border: 3px #8FC351 solid;
+}
+.step-icon-container {
+    border-radius: 50%;
+    padding: 15px;
+    vertical-align: middle;
+    width: 61px;
+    height: 62px;
+    display: block;
+    margin: 1px 3px;
+    text-align:center;
+    float:left;
+    background: #FFFFFF;
+    /* Old browsers */
+    background: linear-gradient(to left, #FFFFFF 50%, #8FC351 50%);
+    background-size: 200% 100%;
+    background-position:right bottom;
+    transition:all 2s ease;
+}
+.completed .step-icon-container {
+    background-position:left bottom;
+}
+.step-icon {
+    vertical-align: middle;
+    padding: 0;
+}
+.disableClick{
+    pointer-events: none;
+}
+
+.auth-steps {
+    min-height:120px;
+}
+
+.register .step1, .register .step2 {
+    margin: 10px auto;
+}
+
+.step2 input {
+    text-align: center;
+}
+
+.register input {
+    margin-top: 2px;
+}
+
+@media screen and (max-device-width: 600px){
+    .process-row:before{
+        top: 30px;
+    }
+
+    .input-group {
+        display: block;
+    }
+    .amount, .currency-select {
+        clear: both;
+        border-radius: 2px;
+        width: 100%;
+    }
+    html body select {
+        background-size: 10px;
+    }
+
+    body html .tab-pane select, input {
+        width: 100%;
+        margin: 0 10px;
+        min-width: 60px;
+    }
+
+    html body .process-step .btn-circle {
+
+    }
+    .step_panel_box {
+        margin: -10px -2px;
+        padding: 0;
+    }
+    body html footer {
+        font-size: 10px;
+        margin-top: 1px;
+        max-height: 25%;
+    }
+
+    html body .amounts .panel {
+        padding: 0;
+    }
+
+    html body  {
+        min-height: 200px;
+        padding: 0;
+    }
+
+    html body .spa-navigation {
+        margin-bottom: 20px;
+    }
+
+}
+.navlink {
+    float: left;
+    height: 50px;
+    padding: 15px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+
+.navlink.active {
+  background-color: #ccc;
+}
+
+.amount {
+    min-width: 55px;
+}
+
+#formLogin {
+    margin-top: 10px;
+}
+
+.col.register {
+    margin: 10px auto;
+}
+
+.popover {
+    max-width: 100%;
+}
+
+.create_withdraw_address input[type=text], .set_withdraw_address select {
+  width:300px;
+}
+
+.withdraw_address_err {
+  max-width: 300px;
+}
+
+.payment-label {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+
+.unique_ref {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.error{
+    border: 3px solid red;
+}
+
+html body .btn {
+    border-radius: 0;
+}
+
+html body .form-control {
+    border-radius: 0;
+}
+
+.supported-payments {
+    background: lightgreen;
+    padding: 35px 0;
+    margin-top: 20px;
+}
+
+.supported_payment {
+    height: 35px;
+    width: 130px;
+    margin: 30px 0;
+}
+
+html body .tab-pane{
+    margin-bottom: 0;
+}
+
+.navbar-light {
+    background: lightgreen;
+}
+
+footer {
+    height: 40px;
+    position: static;
+    bottom: 0;
+    left: 0;
+    color: whitesmoke;
+    width: 100%;
+    background: lightgreen;
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid whitesmoke;
+}
+
+.menuSection {
+    min-height: 60%;
+}
+
+#verification_code {
+    margin: 0 auto;
+}
+
+.step-confirm div.confirmation-elem{
+    margin: 15px auto;
+}
+
+body #card-form .panel {
+    background: none;
+    border-bottom: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+body #card-form .pay-row {
+    height: 50px;
+}
+
+.successOrder .panel-body .row {
+    margin: 10px auto;
+}
+
+.successOrder .btn.btn-success {
+    width: 350px;
+}
+
+.successOrder .qrContainer {
+    width: 350px;
+    margin: auto;
+}
+
+.save.save-card{
+    margin-top: 10px;
+}
+.menuSection {
+    text-align: center;
+    margin: auto;
+}
+
+.nopadding {
+    padding: 0;
+}
+
+button.close {
+    margin: -5px 5px;
+}
+
+.footer {
+    bottom: 0;
+}
+

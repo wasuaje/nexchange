@@ -1,0 +1,49 @@
+{
+  "name": "nexchange",
+  "version": "0.0.1",
+  "description": "Nexchange Project",
+  "main": "index.js",
+  "dependencies": {
+    "bower": "~1.7.9",
+    "toastr": "^2.1.2"
+  },
+  "devDependencies": {
+    "browserify": "latest",
+    "htmllint-cli": "0.0.5",
+    "jasmine": "^2.4.1",
+    "jasmine-core": "^2.4.1",
+    "jshint": "^2.9.2",
+    "karma": "^0.13.22",
+    "karma-browserify": "latest",
+    "karma-cli": "~1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-jasmine-jquery": "^0.1.1",
+    "karma-jquery": "^0.1.0",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "phantomjs-prebuilt": "~2.1",
+    "watchify": "latest"
+  },
+  "scripts": {
+    "test": "karma start --single-run",
+    "bower": "cd static && bower install --allow-root && cd - ",
+    "bower-prd": "cd static && bower install --allow-root --production && cd - ",
+    "lint": "jshint static/js/**",
+    "build-js": "browserify static/js/main.js > static/dist/js/bundle.js",
+    "watch-js": "watchify static/js/main.js -o static/dist/js/bundle.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onitsoft/nexchange.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "nexchange",
+    "onitsoft"
+  ],
+  "author": "onitsoft",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onitsoft/nexchange/issues"
+  },
+  "homepage": "https://github.com/onitsoft/nexchange#readme"
+}

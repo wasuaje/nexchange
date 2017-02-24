@@ -1,0 +1,45 @@
+{% load i18n %}
+<!-- Modal -->
+<div class="modal fade sellMethModal" id="{{ id }}" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h4 class="modal-title">{% trans 'Select payout option' %}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="payment-widget">
+                {% if user.is_authenticated and addresses %}
+                    <div class="row">
+                        <h4 class="modal-title">
+                            {% trans 'Pick one of your saved accounts' %}
+                        </h4>
+                    </div>
+                    <div class="row">
+                        <div class="col col-xs-12">
+                            {% include 'core/partials/user_address.html' %}
+                            <input type="hidden" name="user_address_id" id="user_address_id" value="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-xs-12">
+                            <span class="btn btn-primary">{% trans "Use this "|add:method %}</span>
+                        </div>
+                    </div>
+                {% endif %}
+                {% include 'core/partials/forms/'|add:form|add:'.html' with legend=legend %}
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <span class="btn btn-primary save save-card">{% trans "Go" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <span class="btn btn-warning back back">{% trans 'Back' %}</span>
+          <span class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</span>
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+from django.conf import settings
+
+
+def google_analytics(request):
+    """
+    Use the variables returned in this function to
+    render your Google Analytics tracking code template.
+    """
+    ga_prop_id = getattr(settings, 'GOOGLE_ANALYTICS_PROPERTY_ID', False)
+    ga_domain = getattr(settings, 'GOOGLE_ANALYTICS_DOMAIN', False)
+    # production
+    # if not settings.DEBUG and ga_prop_id and ga_domain:
+    # dev
+    if ga_prop_id and ga_domain:
+        return {
+            'GOOGLE_ANALYTICS_PROPERTY_ID': ga_prop_id,
+            'GOOGLE_ANALYTICS_DOMAIN': ga_domain,
+        }
+    return {}
+
+
+def cms(request):
+    c = {
+        'lang': request.LANGUAGE_CODE,
+        'social': settings.SOCIAL
+    }
+    return c

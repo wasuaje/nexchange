@@ -1,0 +1,403 @@
+
+box: pitervergara/geodjango:nexchange
+ports:
+  - "8000"
+
+dev:
+  services:
+   - id: mdillon/postgis
+     env:
+       POSTGRES_USER: nexchange
+       POSTGRES_PASSWORD: nexchange
+       POSTGRES_DB: nexchange
+   - name: redis
+     id: redis
+     cmd: redis-server
+
+  steps:
+    - script:
+        name: export django settings module
+        code: |
+          export DJANGO_SETTINGS_MODULE=nexchange.settings_dev
+    - script:
+        name: create static and media root
+        code: |
+          mkdir -p /usr/share/nginx/html/static
+          mkdir -p /usr/share/nginx/html/media
+    - npm-install
+    - maxon/npm-run:
+        script: bower
+    - maxon/npm-run:
+        script: build-js
+    - script:
+        name: pip install requirements (with cache)
+        code: |
+          pip_download_cache="$WERCKER_CACHE_DIR/wercker/_pipcache"
+          mkdir -p ${pip_download_cache}
+          pip install --exists-action w --cache-dir ${pip_download_cache} -r requirements.txt
+    - script:
+        name: Django make migrations
+        code: |
+          cat <(echo "yes") - | python manage.py makemigrations
+    - script:
+        name: wait...
+        code: |
+          sleep 5
+    - script:
+        name: Django apply migrations
+        code: |
+          python manage.py migrate
+    - script:
+        name: Run celery
+        code: |
+           adduser --disabled-password --gecos '' celery_user
+           celery worker -A nexchange --uid=celery_user -l info &
+           celery beat -A nexchange -l info &
+    - script:
+        name: Django compile messages
+        code: |
+            # python manage.py compilemessages
+    - script:
+      name: Django create superuser
+      code: |
+          echo "from django.contrib.auth.models import User; User.objects.create_superuser('onit', 'weare@init.ws','weare0nit')" | python manage.py shell
+    - script:
+        name: Django import Currency fixture
+        code: |
+          python manage.py loaddata core/fixtures/currency.json
+    - script:
+        name: Django import Payment Methods fixture
+        code: |
+          python manage.py loaddata payments/fixtures/payment_method.json
+    - script:
+        name: Django import Payment Preference fixture
+        code: |
+          python manage.py loaddata payments/fixtures/payment_preference.json
+    - script:
+        name: Django import Payment CmsPage fixture
+        code: |
+          python manage.py loaddata payments/fixtures/cmspages.json
+    - script:
+        name: Django import Withdraw address fixture
+        code: |
+          python manage.py loaddata core/fixtures/withdraw_address.json
+    - script:
+        name: Django import affiliate program fixture
+        code: |
+          python manage.py loaddata core/fixtures/affiliate_program.json
+    - script:
+        name: Django run ticker update prices command
+        code: |
+#          python manage.py ticker
+    - script:
+        name: Django collect static
+        code: |
+          python manage.py collectstatic --noinput
+    - script:
+        name: Link pre-commit hook script
+        code: |     
+          chmod +x .pre-commit.sh 
+          cd .git/hooks/
+          ln -fs ../../.pre-commit.sh pre-commit
+          cd -
+
+    - create-file:
+        name: Create cron invoked script to run ticker
+        filename: /ticker.sh
+        overwrite: true
+        content: |-
+          #!/bin/bash
+          #
+          export DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+          export POSTGIS_ENV_POSTGRES_USER=${POSTGIS_ENV_POSTGRES_USER}
+          export POSTGIS_ENV_POSTGRES_PASSWORD=${POSTGIS_ENV_POSTGRES_PASSWORD}
+          export POSTGIS_ENV_POSTGRES_DB=${POSTGIS_ENV_POSTGRES_DB}
+          export POSTGIS_PORT_5432_TCP_ADDR=${POSTGIS_PORT_5432_TCP_ADDR}
+          export POSTGIS_PORT_5432_TCP_PORT=${POSTGIS_PORT_5432_TCP_PORT}
+          #
+          cd ${WERCKER_SOURCE_DIR}
+          /usr/local/bin/python manage.py ticker >> /var/log/cron.log 2>&1
+    - script:
+        name: Add cron job
+        code: |
+          chmod +x /ticker.sh
+          echo "* * * * * root /ticker.sh" > /etc/crontab
+          cron
+    - internal/watch:
+        code: |
+          echo 'Dev server running'
+           npm run watch-js & newrelic-admin run-program  python manage.py runserver 0.0.0.0:8000
+        reload: false
+
+build:
+  services:
+   - id: mdillon/postgis
+     env:
+       POSTGRES_USER: ${POSTGIS_ENV_POSTGRES_USER}
+       POSTGRES_PASSWORD: ${POSTGIS_ENV_POSTGRES_PASSWORD}
+       POSTGRES_DB: ${POSTGIS_ENV_POSTGRES_DB}
+  steps:
+    - install-packages:
+      packages: netcat
+    - script:
+        name: create static and media root
+        code: |
+          mkdir -p /usr/share/nginx/html/static
+          mkdir -p /usr/share/nginx/html/media
+    - script:
+      name: Install node requirements
+      code: |
+        # https://github.com/wercker/support/issues/227 :(
+        rm -fr node_modules && npm install --production
+    - maxon/npm-run:
+        script: bower-prd
+    - script:
+        name: Install python requirements
+        code: |
+          pip_download_cache="$WERCKER_CACHE_DIR/wercker/_pipcache"
+          mkdir -p ${pip_download_cache}
+          pip install --exists-action w --cache-dir ${pip_download_cache} -r requirements.txt
+    - script:
+        name: Django migrations
+        code: |
+          python manage.py makemigrations
+          yes w | python manage.py makemigrations --merge
+    - script:
+        name: django collect and compile translations
+        code: |
+          # python manage.py compilemessages
+
+    - script:
+        name: Django collect static
+        code: |
+          python manage.py collectstatic --noinput
+    - script:
+      name: copy files
+      code: |
+        mkdir -p /usr/src/app
+        cp -r [a-z]* /usr/src/app
+        cp -r /usr/share/nginx/html/static $WERCKER_OUTPUT_DIR/staticfiles
+        cp -r /usr/share/nginx/html/media $WERCKER_OUTPUT_DIR/mediafiles
+    - script:
+        name: place docker-compose and nginx.conf files
+        code: |
+          mv "nginx.conf" "$WERCKER_OUTPUT_DIR/nginx.conf"
+          mv "docker-compose.yml" "$WERCKER_OUTPUT_DIR/docker-compose.yml"
+    - create-file:
+        #
+        # PEM_FILE_CONTENT - the key to SSH into server (create key par via wercker web interface. remeber to install public key on server)
+        # SSH_USER - the user to SSH into server
+        # DEST_HOST_ADDR - server where to deploy  
+        #
+        # DOCKER_HUB_USER - dockerhub username
+        # DOCKER_HUB_PASSWORD - dockerhub password (defined as a protectd var)
+        # DOCKER_HUB_REPO - the dockerhub repo where to push (repo must already exists and should be private)
+        name: Create production entrypoint
+        filename: /entrypoint.sh
+        overwrite: true
+        content: |-
+          #!/bin/bash
+          # ###
+          # This script is generate in deploy step and:
+          #   Exports variables
+          #   Apply migrations
+          #   Starts gunicorn
+          # ###
+          export DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+          export GUNICORN_PORT=${GUNICORN_PORT}
+          export POSTGIS_ENV_POSTGRES_USER=${POSTGIS_ENV_POSTGRES_USER}
+          export POSTGIS_ENV_POSTGRES_PASSWORD=${POSTGIS_ENV_POSTGRES_PASSWORD}
+          export POSTGIS_ENV_POSTGRES_DB=${POSTGIS_ENV_POSTGRES_DB}
+          export POSTGIS_PORT_5432_TCP_ADDR=${POSTGIS_PORT_5432_TCP_ADDR}
+          export POSTGIS_PORT_5432_TCP_PORT=${POSTGIS_PORT_5432_TCP_PORT}
+          export NEW_RELIC_CONFIG_FILE=${NEW_RELIC_CONFIG_FILE}
+          export NEW_RELIC_ENVIRONMENT=${NEW_RELIC_ENVIRONMENT}
+          export NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
+          #
+          while ! nc -z ${POSTGIS_PORT_5432_TCP_ADDR} ${POSTGIS_PORT_5432_TCP_PORT}
+          do
+            >&2 echo "PostgreSQL '(${POSTGIS_PORT_5432_TCP_ADDR}:${POSTGIS_PORT_5432_TCP_PORT})' not ready - waiting..."
+            sleep 1;
+          done
+          echo "PostgreSQL '(${POSTGIS_PORT_5432_TCP_ADDR}:${POSTGIS_PORT_5432_TCP_PORT})' is ready - moving on..."
+          #
+          # Apply migrations
+          python /usr/src/app/manage.py migrate
+          # Import fixtures
+          python /usr/src/app/manage.py loaddata core/fixtures/currency.json
+          python /usr/src/app/manage.py loaddata payments/fixtures/payment_method.json
+          python /usr/src/app/manage.py loaddata payments/fixtures/payment_preference.json
+          python /usr/src/app/manage.py loaddata core/fixtures/affiliate_program.json
+          echo "To load the 'withdraw_address' fixture, uncomment the next line"
+          # python manage.py loaddata core/fixtures/withdraw_address.json
+          #
+          # Prepare log files and start outputting logs to stdout
+          # adapted from http://goo.gl/E7kRfL
+          touch /var/log/gunicorn_error.log
+          touch /var/log/gunicorn_access.log
+          tail -n 0 -f /var/log/*.log &
+          # Copy static data to nginx volume
+          cp -ra $WERCKER_OUTPUT_DIR/staticfiles/* /usr/share/nginx/html/static
+          cp -ra $WERCKER_OUTPUT_DIR/mediafiles/* /usr/share/nginx/html/media
+          #
+          # Create superuser
+          echo "from django.contrib.auth.models import User; User.objects.create_superuser('onit', 'weare@onit.ws','weare0nit')" | python manage.py shell
+          #
+          # Start Cron Process
+          cron
+          # Start celery stuff
+          adduser --disabled-password --gecos '' celery_user
+          celery worker -A nexchange --uid=celery_user -l info &
+          celery beat -A nexchange -l info &
+          echo "Gunicorn start"
+          exec newrelic-admin run-program gunicorn --chdir /usr/src/app --name nexchange --bind 0.0.0.0:${GUNICORN_PORT} --workers 3 --log-level=info --log-file=/var/log/gunicorn_error.log --access-logfile=/var/log/gunicorn_access.log nexchange.wsgi:application "$@"
+    - script:
+        name: set entrypoint as executable
+        code: |
+          chmod +x /entrypoint.sh
+
+    - create-file:
+        name: Create cron invoked script to run ticker
+        filename: /ticker.sh
+        overwrite: true
+        content: |-
+          #!/bin/bash
+          #
+          export DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+          export POSTGIS_ENV_POSTGRES_USER=${POSTGIS_ENV_POSTGRES_USER}
+          export POSTGIS_ENV_POSTGRES_PASSWORD=${POSTGIS_ENV_POSTGRES_PASSWORD}
+          export POSTGIS_ENV_POSTGRES_DB=${POSTGIS_ENV_POSTGRES_DB}
+          export POSTGIS_PORT_5432_TCP_ADDR=${POSTGIS_PORT_5432_TCP_ADDR}
+          export POSTGIS_PORT_5432_TCP_PORT=${POSTGIS_PORT_5432_TCP_PORT}
+          #
+          cd ${WERCKER_SOURCE_DIR}
+          /usr/local/bin/python manage.py ticker >> /var/log/cron.log 2>&1
+    - script:
+        name: Add cron job
+        code: |
+          chmod +x /ticker.sh
+          echo "* * * * * root /ticker.sh" > /etc/crontab
+    - script:
+        name: echo python information
+        code: |
+          echo "python version $(python --version) running"
+          echo "pip version $(pip --version) running"
+          echo "installed python packages:"
+          echo "$(pip freeze | sort)"
+    - internal/docker-push:
+        username: $DOCKER_HUB_USER
+        password: $DOCKER_HUB_PASSWORD
+        tag: ${DOCKER_IMAGE_TAG}
+        repository: $DOCKER_HUB_REPO
+        registry: https://registry.hub.docker.com
+        entrypoint: /entrypoint.sh
+        ports: ${GUNICORN_PORT}
+        working-dir: /usr/src/app
+
+deploy:
+  steps:
+    - add-to-known_hosts:
+      hostname: $DEST_HOST_ADDR
+    - script:
+      name: create pipeline dir
+      code: |
+        mkdir -p /pipeline
+    - install-packages:
+      packages: knockd
+    - mktemp:
+        envvar: PRIVATEKEY_PATH
+    - create-file:
+        name: write key
+        filename: $PRIVATEKEY_PATH
+        content: $PEM_FILE_CONTENT_PRIVATE  
+        overwrite: true
+    - script:
+      name: Do deploy
+      code: |
+        SSH_OPTIONS="-o StrictHostKeyChecking=no -i $PRIVATEKEY_PATH"
+        SSH_DEST="$SSH_USER@$DEST_HOST_ADDR"
+        SUBSTR=${WERCKER_GIT_COMMIT:0:9}
+        echo 'knocking port open'
+        for port in ${KNOCK_PORT_SEQUENCE}; do
+          knock $DEST_HOST_ADDR $port
+          sleep 0.4
+        done
+        echo 'knocking done'
+        scp ${SSH_OPTIONS} nginx.conf ${SSH_DEST}:/nexchange/etc/nginx/nginx.conf
+        scp ${SSH_OPTIONS} docker-compose.yml ${SSH_DEST}:/nexchange/docker-compose.yml
+        ssh ${SSH_OPTIONS} ${SSH_DEST} << EOF
+          # export the variables that docker-compose will inject into DB container
+          export POSTGIS_ENV_POSTGRES_USER=${POSTGIS_ENV_POSTGRES_USER}
+          export POSTGIS_ENV_POSTGRES_PASSWORD=${POSTGIS_ENV_POSTGRES_PASSWORD}
+          export POSTGIS_ENV_POSTGRES_DB=${POSTGIS_ENV_POSTGRES_DB}
+          export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}
+          echo "Printing current env:"
+          /usr/bin/env
+          echo "env of env"
+          # Login to docker hub (for private images)
+          docker login \
+            -u $DOCKER_HUB_USER \
+            -p $DOCKER_HUB_PASSWORD
+          # Start new instance
+          docker-compose -f /nexchange/docker-compose.yml pull
+          docker-compose -f /nexchange/docker-compose.yml up -d
+        EOF
+
+tests:
+  steps:
+    - script:
+        name: export django settings
+        code: |
+          export DJANGO_SETTINGS_MODULE=nexchange.settings_test
+    - script:
+        name: Install python requirements
+        code: |
+          pip_download_cache="$WERCKER_CACHE_DIR/wercker/_pipcache"
+          mkdir -p ${pip_download_cache}
+          yes w | pip install --cache-dir ${pip_download_cache} -r requirements.txt
+          has_krakenex=$(python -c "import importlib; k = importlib.find_loader('krakenex'); print(str(k is not None))")
+          if [ "${has_krakenex}" == "False" ]; then
+            git clone https://github.com/onitsoft/python3-krakenex.git /usr/src/krakenex
+            cd /usr/src/krakenex
+            python3 setup.py install
+            cd -
+          fi
+          python -c "import krakenex; print('import krakenex sucessfully executed')"
+
+          has_uphold=$(python -c "import importlib; k = importlib.find_loader('uphold'); print(str(k is not None))")
+          if [ "${has_uphold}" == "False" ]; then
+            git clone https://github.com/byrnereese/uphold-sdk-python.git /usr/src/uphold
+            cd /usr/src/uphold
+            python3 setup.py install
+            cd -
+          fi
+          python -c "import uphold; print('import uphold sucessfully executed')"
+    - script:
+      name: Install node requirements
+      code: |
+        # rm -fr node_modules && npm install
+        npm install
+    - maxon/npm-run:
+        script: bower
+    - script:
+        name: Backend tests
+        code: |
+          coverage erase
+          coverage run --source="." manage.py test -v 3
+          coverage report
+          coverage html -d cover
+    - script:
+        name: Frontend tests
+        code: |
+          # export PHANTOMJS_BIN=${WERCKER_SOURCE_DIR}/node_modules/.bin/phantomjs
+          # npm run-script test
+    - script:
+        name: Validate New Relic config file
+        code: |
+          newrelic-admin validate-config ${NEW_RELIC_CONFIG_FILE}
+static-validation:
+  steps:
+    - script:
+        name: Run static-validation.sh
+        code: |
+          bash static-validation.sh
